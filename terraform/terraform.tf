@@ -111,11 +111,13 @@ resource "aws_codedeploy_deployment_group" "main" {
     deployment_group_name = "vkulov"
     service_role_arn = "${aws_iam_role.vkulov_deploy_role.arn}"
 
-    ec2_tag_filter {
-        key = "filterkey"
-        type = "KEY_AND_VALUE"
-        value = "filtervalue"
-    }
+    autoscaling_groups = "${var.name}"
+
+    #ec2_tag_filter {
+    #    key = "filterkey"
+    #    type = "KEY_AND_VALUE"
+    #    value = "filtervalue"
+    #}
 
     #trigger_configuration {
     #    trigger_events = ["DeploymentFailure"]
