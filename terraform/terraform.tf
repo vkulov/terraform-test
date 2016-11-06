@@ -53,13 +53,13 @@ module "nginx" {
 
 
 
-resource "aws_codedeploy_app" "foo_app" {
-    name = "foo_app"
+resource "aws_codedeploy_app" "main" {
+    name = "vkulov"
 }
 
-resource "aws_iam_role_policy" "foo_policy" {
-    name = "foo_policy"
-    role = "${aws_iam_role.foo_role.id}"
+resource "aws_iam_role_policy" "deploy_policy" {
+    name = "vkulov_policy"
+    role = "${aws_iam_role.deploy_role.id}"
     policy = <<EOF
 {
     "Version": "2012-10-17",
@@ -85,8 +85,8 @@ resource "aws_iam_role_policy" "foo_policy" {
 EOF
 }
 
-resource "aws_iam_role" "foo_role" {
-    name = "foo_role"
+resource "aws_iam_role" "vkulov_deploy_role" {
+    name = "vkulov_deploy_role"
     assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -106,10 +106,10 @@ resource "aws_iam_role" "foo_role" {
 EOF
 }
 
-resource "aws_codedeploy_deployment_group" "foo" {
-    app_name = "${aws_codedeploy_app.foo_app.name}"
-    deployment_group_name = "bar"
-    service_role_arn = "${aws_iam_role.foo_role.arn}"
+resource "aws_codedeploy_deployment_group" "main" {
+    app_name = "${aws_codedeploy_app.main.name}"
+    deployment_group_name = "vkulov"
+    service_role_arn = "${aws_iam_role.vkulov_deploy_role.arn}"
 
     ec2_tag_filter {
         key = "filterkey"
@@ -117,9 +117,9 @@ resource "aws_codedeploy_deployment_group" "foo" {
         value = "filtervalue"
     }
 
-    trigger_configuration {
-        trigger_events = ["DeploymentFailure"]
-        trigger_name = "foo-trigger"
-        trigger_target_arn = "foo-topic-arn"
-    }
+    #trigger_configuration {
+    #    trigger_events = ["DeploymentFailure"]
+    #    trigger_name = "foo-trigger"
+    #    trigger_target_arn = "foo-topic-arn"
+    #}
 }
