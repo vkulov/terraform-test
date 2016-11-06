@@ -59,7 +59,7 @@ resource "aws_codedeploy_app" "main" {
 
 resource "aws_iam_role_policy" "deploy_policy" {
     name = "vkulov_policy"
-    role = "${aws_iam_role.deploy_role.id}"
+    role = "${aws_iam_role.vkulov_deploy_role.id}"
     policy = <<EOF
 {
     "Version": "2012-10-17",
