@@ -111,7 +111,7 @@ resource "aws_codedeploy_deployment_group" "main" {
     deployment_group_name = "vkulov"
     service_role_arn = "${aws_iam_role.vkulov_deploy_role.arn}"
 
-    autoscaling_groups = "${var.name}"
+    autoscaling_groups = "vkulov-app"
 
     #ec2_tag_filter {
     #    key = "filterkey"
