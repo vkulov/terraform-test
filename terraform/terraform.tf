@@ -16,18 +16,21 @@ module "stack" {
   ecs_instance_type = "t2.micro"
   ecs_instance_ebs_optimized = "false"
 
+  ecs_min_size = "1"
+  ecs_max_size = "1"
+  ecs_desired_capacity = "1"
 }
 
-resource "null_resource" "conf" {
+#resource "null_resource" "conf" {
   # Copies the myapp.conf file to /etc/myapp.conf
-  provisioner "file" {
-      source = "conf/myapp.conf"
-      destination = "/etc/myapp.conf"
-  }
-}
+#  provisioner "file" {
+#      source = "conf/myapp.conf"
+#      destination = "/etc/myapp.conf"
+#  }
+#}
 
-resource "aws_ecr_repository" "foo" {
-  name = "bar"
+resource "aws_ecr_repository" "main" {
+  name = "vkulov"
 }
 
 module "nginx" {
@@ -44,4 +47,79 @@ module "nginx" {
   subnet_ids      = "${join(",", module.stack.internal_subnets)}"
   log_bucket      = "${module.stack.log_bucket_id}"
   zone_id         = "${module.stack.zone_id}"
+}
+
+
+
+
+
+resource "aws_codedeploy_app" "foo_app" {
+    name = "foo_app"
+}
+
+resource "aws_iam_role_policy" "foo_policy" {
+    name = "foo_policy"
+    role = "${aws_iam_role.foo_role.id}"
+    policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "autoscaling:CompleteLifecycleAction",
+                "autoscaling:DeleteLifecycleHook",
+                "autoscaling:DescribeAutoScalingGroups",
+                "autoscaling:DescribeLifecycleHooks",
+                "autoscaling:PutLifecycleHook",
+                "autoscaling:RecordLifecycleActionHeartbeat",
+                "ec2:DescribeInstances",
+                "ec2:DescribeInstanceStatus",
+                "tag:GetTags",
+                "tag:GetResources"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+EOF
+}
+
+resource "aws_iam_role" "foo_role" {
+    name = "foo_role"
+    assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": [
+          "codedeploy.amazonaws.com"
+        ]
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_codedeploy_deployment_group" "foo" {
+    app_name = "${aws_codedeploy_app.foo_app.name}"
+    deployment_group_name = "bar"
+    service_role_arn = "${aws_iam_role.foo_role.arn}"
+
+    ec2_tag_filter {
+        key = "filterkey"
+        type = "KEY_AND_VALUE"
+        value = "filtervalue"
+    }
+
+    trigger_configuration {
+        trigger_events = ["DeploymentFailure"]
+        trigger_name = "foo-trigger"
+        trigger_target_arn = "foo-topic-arn"
+    }
 }
