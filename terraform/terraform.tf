@@ -34,6 +34,8 @@ module "nginx" {
   # dns_name        = "vkulov-app"
 
   port            = 80
+  ssl_certificate_id = "arn:aws:acm:us-west-2:113389272869:certificate/11bb3b1d-9b27-4c32-a3d7-01fef32eb071"
+
   environment     = "${module.stack.environment}"
   cluster         = "${module.stack.cluster}"
   iam_role        = "${module.stack.iam_role}"
