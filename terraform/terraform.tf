@@ -46,7 +46,6 @@ module "nginx" {
   security_groups = "${module.stack.internal_elb}"
   subnet_ids      = "${join(",", module.stack.internal_subnets)}"
   log_bucket      = "${module.stack.log_bucket_id}"
-  zone_id         = "${module.stack.zone_id}"
 }
 
 
