@@ -39,8 +39,8 @@ module "nginx" {
   environment     = "${module.stack.environment}"
   cluster         = "${module.stack.cluster}"
   iam_role        = "${module.stack.iam_role}"
-  security_groups = "${module.stack.internal_elb}"
-  subnet_ids      = "${join(",", module.stack.internal_subnets)}"
+  security_groups = "${module.stack.external_elb}"
+  subnet_ids      = "${join(",", module.stack.external_subnets)}"
   log_bucket      = "${module.stack.log_bucket_id}"
 
   internal_zone_id = "${module.stack.zone_id}"
