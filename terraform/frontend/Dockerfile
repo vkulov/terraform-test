@@ -6,7 +6,7 @@ COPY conf/mime.types /etc/nginx/conf/mime.types
 
 COPY conf/mime.types /etc/nginx/conf/mime.types
 
-COPY ../src /var/www/html
+COPY src /var/www/html
 
 RUN mkdir -p /run/nginx
 
