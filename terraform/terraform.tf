@@ -29,7 +29,7 @@ module "nginx" {
   # this sources from the "stack//service" module
   source          = "github.com/segmentio/stack//web-service"
   name            = "nginx"
-  image           = "vkulov/frontend"
+  image           = "vkulov/frontend:latest"
 
   # dns_name        = "vkulov-app"
 
@@ -47,6 +47,6 @@ module "nginx" {
   external_zone_id = "${module.domain.zone_id}"
 }
 
-
-
-
+output "bastion_ip" {
+  value = "${module.stack.bastion_ip}"
+}
