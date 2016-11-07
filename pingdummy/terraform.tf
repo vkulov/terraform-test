@@ -20,7 +20,7 @@ module "pingdummy" {
   cluster          = "${module.stack.cluster}"
   iam_role         = "${module.stack.iam_role}"
   security_groups  = "${module.stack.external_elb}"
-  subnet_ids       = "${module.stack.external_subnets}"
+  subnet_ids       = "${join(",", module.stack.external_subnets)}"
   log_bucket       = "${module.stack.log_bucket_id}"
   internal_zone_id = "${module.stack.zone_id}"
   external_zone_id = "${module.domain.zone_id}"
@@ -57,7 +57,7 @@ resource "aws_route53_record" "root" {
 }
 
 module "db" {
-  source             = "../stack/rds-cluster"
+  source             = "github.com/segmentio/stack/rds-cluster"
   name               = "pingdummy"
   database_name      = "pingdummy"
   master_username    = "root"
@@ -65,7 +65,7 @@ module "db" {
   environment        = "${module.stack.environment}"
   vpc_id             = "${module.stack.vpc_id}"
   zone_id            = "${module.stack.zone_id}"
-  security_groups    = "${module.stack.ecs_cluster_security_group_id}"
+  security_groups    = "${split(",", module.stack.ecs_cluster_security_group_id)}"
   subnet_ids         = "${module.stack.internal_subnets}"
   availability_zones = "${module.stack.availability_zones}"
 }
@@ -83,7 +83,7 @@ module "beacon" {
   zone_id         = "${module.stack.zone_id}"
   iam_role        = "${module.stack.iam_role}"
   security_groups = "${module.stack.internal_elb}"
-  subnet_ids      = "${module.stack.internal_subnets}"
+  subnet_ids      = "${join(",", module.stack.internal_subnets)}"
   log_bucket      = "${module.stack.log_bucket_id}"
 }
 
