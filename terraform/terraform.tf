@@ -42,9 +42,16 @@ module "nginx" {
   security_groups = "${module.stack.external_elb}"
   subnet_ids      = "${join(",", module.stack.external_subnets)}"
   log_bucket      = "${module.stack.log_bucket_id}"
-
   internal_zone_id = "${module.stack.zone_id}"
   external_zone_id = "${module.domain.zone_id}"
+
+  env_vars = <<EOF
+[
+  { "name": "AWS_REGION",            "value": "${module.stack.region}"        },
+  { "name": "AWS_ACCESS_KEY_ID",     "value": "${module.ses_user.access_key}" },
+  { "name": "AWS_SECRET_ACCESS_KEY", "value": "${module.ses_user.secret_key}" }
+]
+EOF
 }
 
 output "bastion_ip" {
