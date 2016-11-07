@@ -54,6 +54,36 @@ module "nginx" {
 EOF
 }
 
+module "ses_user" {
+  source = "github.com/segmentio/stack//iam-user"
+  name   = "ses-user"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": ["ses:*"],
+      "Resource":"*"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_route53_record" "main" {
+  zone_id = "${module.domain.zone_id}"
+  name    = "${module.domain.name}"
+  type    = "A"
+
+  alias {
+    name                   = "${module.nginx.dns}"
+    zone_id                = "${module.nginx.zone_id}"
+    evaluate_target_health = false
+  }
+}
+
 output "bastion_ip" {
   value = "${module.stack.bastion_ip}"
 }
