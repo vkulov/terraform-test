@@ -3,6 +3,10 @@ provider "aws" {
 }
 
 
+module "domain" {
+  source = "github.com/segmentio/stack//dns"
+  name   = "vkulov-app.dev"
+}
 
 module "stack" {
   source      = "github.com/segmentio/stack"
