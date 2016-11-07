@@ -38,7 +38,9 @@ module "nginx" {
   source          = "github.com/segmentio/stack//web-service"
   name            = "nginx"
   image           = "foo"
-  dns_name        = "vkulov-app"
+
+  # dns_name        = "vkulov-app"
+
   port            = 80
   environment     = "${module.stack.environment}"
   cluster         = "${module.stack.cluster}"
@@ -46,6 +48,9 @@ module "nginx" {
   security_groups = "${module.stack.internal_elb}"
   subnet_ids      = "${join(",", module.stack.internal_subnets)}"
   log_bucket      = "${module.stack.log_bucket_id}"
+
+  internal_zone_id = "${module.stack.zone_id}"
+  external_zone_id = "${module.domain.zone_id}"
 }
 
 
