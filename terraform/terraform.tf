@@ -31,8 +31,6 @@ module "nginx" {
   name            = "nginx"
   image           = "vkulov/frontend"
 
-  # dns_name        = "vkulov-app"
-
   port            = 80
   ssl_certificate_id = "arn:aws:acm:us-west-2:113389272869:certificate/11bb3b1d-9b27-4c32-a3d7-01fef32eb071"
 
@@ -53,6 +51,25 @@ module "nginx" {
 ]
 EOF
 }
+
+
+
+module "php" {
+  source         = "github.com/segmentio/stack//service"
+  name           = "php"
+  image          = "vkulov/backend"
+  port           = 9000
+  dns_name       = "php"
+
+  environment     = "${module.stack.environment}"
+  cluster         = "${module.stack.cluster}"
+  zone_id         = "${module.stack.zone_id}"
+  iam_role        = "${module.stack.iam_role}"
+  security_groups = "${module.stack.internal_elb}"
+  subnet_ids      = "${join(",", module.stack.internal_subnets)}"
+  log_bucket      = "${module.stack.log_bucket_id}"
+}
+
 
 module "ses_user" {
   source = "github.com/segmentio/stack//iam-user"
