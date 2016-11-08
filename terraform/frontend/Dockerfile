@@ -10,4 +10,4 @@ COPY src /var/www/html
 
 RUN mkdir -p /run/nginx
 
-EXPOSE 80
+EXPOSE 3000
