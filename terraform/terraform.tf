@@ -9,7 +9,7 @@ module "domain" {
 }
 
 module "stack" {
-  source      = "github.com/vkulov/segment-stack/stack"
+  source      = "github.com/vkulov/segment-stack"
   environment = "prod"
   key_name    = "vesko"
   name        = "vkulov-app"
