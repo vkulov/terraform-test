@@ -43,6 +43,8 @@ module "nginx" {
   internal_zone_id = "${module.stack.zone_id}"
   external_zone_id = "${module.domain.zone_id}"
 
+  memory           = 128
+
   env_vars = <<EOF
 [
   { "name": "AWS_REGION",            "value": "${module.stack.region}"        },
@@ -60,6 +62,8 @@ module "php" {
   image          = "vkulov/backend"
   port           = 9000
   dns_name       = "php"
+
+  memory           = 256
 
   environment     = "${module.stack.environment}"
   cluster         = "${module.stack.cluster}"
