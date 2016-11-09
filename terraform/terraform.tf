@@ -66,6 +66,7 @@ module "php" {
 
   memory          = 256
   protocol        = "TCP"
+  healthcheck     = ""
 
   environment     = "${module.stack.environment}"
   cluster         = "${module.stack.cluster}"
