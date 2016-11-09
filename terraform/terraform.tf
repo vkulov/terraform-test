@@ -61,9 +61,11 @@ module "php" {
   name           = "php"
   image          = "vkulov/backend"
   port           = 9000
+  container_port = 9000
   dns_name       = "php"
 
-  memory           = 256
+  memory          = 256
+  protocol        = "TCP"
 
   environment     = "${module.stack.environment}"
   cluster         = "${module.stack.cluster}"
