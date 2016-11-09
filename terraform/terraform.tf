@@ -44,6 +44,7 @@ module "nginx" {
   external_zone_id = "${module.domain.zone_id}"
 
   memory           = 128
+  desired_count   = 1
 
   env_vars = <<EOF
 [
@@ -67,6 +68,7 @@ module "php" {
   memory          = 256
   protocol        = "TCP"
   healthcheck     = ""
+  desired_count   = 1
 
   environment     = "${module.stack.environment}"
   cluster         = "${module.stack.cluster}"
