@@ -146,11 +146,11 @@ RUN set -ex \
 	fi \
 	&& { \
 		echo '[global]'; \
-		echo 'error_log = /proc/self/fd/2'; \
+		echo 'error_log = /dev/stdout'; \
 		echo; \
 		echo '[www]'; \
 		echo '; if we send this to /proc/self/fd/1, it never appears'; \
-		echo 'access.log = /proc/self/fd/2'; \
+		echo 'access.log = /dev/stdout'; \
 		echo; \
 		echo 'clear_env = no'; \
 		echo; \
