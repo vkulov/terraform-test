@@ -4,12 +4,12 @@ provider "aws" {
 
 
 module "domain" {
-  source = "github.com/vkulov/segment-stack/dns"
+  source = "github.com/segmentio/stack//dns"
   name   = "vkulov-app.dev"
 }
 
 module "stack" {
-  source      = "github.com/vkulov/segment-stack"
+  source      = "github.com/segmentio/stack"
   environment = "prod"
   key_name    = "vesko"
   name        = "vkulov-app"
@@ -26,7 +26,8 @@ module "stack" {
 }
 
 module "nginx" {
-  source          = "github.com/vkulov/segment-stack/web-service"
+  # this sources from the "stack//service" module
+  source          = "github.com/segmentio/stack//web-service"
   name            = "nginx"
   image           = "vkulov/frontend"
 
@@ -57,7 +58,7 @@ EOF
 
 
 module "php" {
-  source         = "github.com/vkulov/segment-stack/service"
+  source         = "github.com/segmentio/stack//service"
   name           = "php"
   image          = "vkulov/backend"
   port           = 9000
@@ -80,7 +81,7 @@ module "php" {
 
 
 module "ses_user" {
-  source = "github.com/vkulov/segment-stack/iam-user"
+  source = "github.com/segmentio/stack//iam-user"
   name   = "ses-user"
 
   policy = <<EOF
