@@ -1,0 +1,14 @@
+index index.php index.html index.htm;
+
+location ~ \.php$ {
+
+    include fastcgi_params;
+
+    fastcgi_intercept_errors on;
+    fastcgi_index index.php;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+
+    # ELB internal services are configured to listen on port 80 by default on segmentio
+    fastcgi_pass   php:80;
+
+}
