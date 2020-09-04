@@ -20,7 +20,7 @@
   "dependencies": {
     "mysql": "^2.11.1",
     "pingdummy-common": "file:../common",
-    "sequelize": "^3.23.3",
+    "sequelize": "^6.3.5",
     "sqlite3": "^3.1.4"
   }
 }
